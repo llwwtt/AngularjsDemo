@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<style>
+		.container{
+			max-width: 720px;
+		}
+		.done {
+			color: #cca;
+		}
+		.checkbox {
+			margin-right: 12px;
+			margin-bottom: 0;
+		}
+		ul>li {
+			list-style: none;
+		}
+		.done >.checkbox >label >span {
+			text-decoration: line-through;
+		}
+	</style>
+	<script src="angular-1.5.8/angular.js"></script>
+</head>
+<body>
+	<div class="container" ng-app='todoapp'>
+		<header>
+			<h1 class="display-3">TODO List</h1>
+		</header>
+		<!-- 内容部分 -->
+		<section ng-controller='mainController'>
+			<form class="input-group input-group-lg">
+				<input type="text" class="form-control" ng-model='text'>
+				<span class="input-group-btn">
+					<button class="btn btn-secondary" ng-click='add()'></button>
+				</span>
+			</form>
+			<ul class="list-group" style="padding: 12px">
+				<li class="list-group-item" ng-class="{'done':item.done}" ng-repeat='item in todolist'>
+					<button type="button" class="close" aria-label='close' ng-click = 'delete(item)'>
+						<span aria-hidden='true'>&times</span>
+						<span class="sr-only">close</span>
+					</button>
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" ng-model = 'item.done'>
+							<span>{{item.text}}</span>
+						</label>
+					</div>
+				</li>
+			</ul>
+			<p>
+				总共<strong>{{todolist.length}}</strong>个任务，已完成<strong>{{doneCount()}}</strong>个
+			</p>
+		</section>
+	</div>
+	<script>
+		angular.module('todoapp',[])
+		.controller('mainController',['$scope',function($scope){
+				$scope.text='';
+				$scope.todolist = [
+				{
+					text:'angularjs',
+					done:false
+				},{
+					text:'bootstrap',
+					done:false
+				}];
+				//点击按钮 添加
+				$scope.add = function(){
+					var text = $scope.text.trim();
+					if(text){
+						$scope.todolist.push({
+							text:text,
+							done:false
+						});
+						$scope.text = '';
+					}
+				};
+				//点击按钮删除
+				$scope.delete = function(todo){
+					var index = $scope.todolist.indexOf(todo);
+					$scope.todolist.splice(index,1);
+				};
+				//获取已完成的事件个数 按照checkbox的选择与否实现
+				$scope.doneCount = function(){
+					var temp = $scope.todolist.filter(function(item){
+						return item.done;//返回true表示当前的数据满足条件，事件已经完成
+					});
+					return temp.length;
+				}
+
+		}])
+	</script>
+</body>
+</html>
