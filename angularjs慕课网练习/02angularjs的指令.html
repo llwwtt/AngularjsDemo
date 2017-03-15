@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body ng-app='mainapp'>
+<!-- 如何让浏览器认识hello这个标签？需要借助指令 也就是directive -->
+	<hello></hello>
+
+
+
+
+	<script src="angular-1.5.8/angular.js"></script>
+	<script>
+		angular.module('mainapp',[])
+		.directive('hello',function(){
+			return {
+				restrict:'E',
+				template:'<div>hello everyone</div>',
+				replace:true
+			}
+		})
+		//指令不只是自定义标签这么简单，还能实现很多功能 ng-app就是一个指令 相当于c语言中的main方法 后面再学习
+	</script>
+</body>
+</html>

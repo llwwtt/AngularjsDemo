@@ -1,0 +1,1 @@
+module.exports = "这是module.js中的内容";

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="angular-1.5.8/angular.js"></script>
+</head>
+<body ng-app='mainApp'>
+    <div ng-controller='mainController'>
+        <loader>哈哈</loader>
+    </div>
+    <script>
+     angular.module('mainApp',[])
+     .controller('mainController',['$scope',function($scope){
+          $scope.loadData=function(){
+              document.write('数据加载中。。。');
+          }
+         }])
+         .directive('loader',function(){
+             return {
+                 restrict:'AE',
+                 link:function(scope,element,attr){
+                     element.bind('mouseenter',function(){
+                        scope.$apply('loadData()');
+                     });
+                 }
+             }
+         })
+    </script>
+</body>
+</html>

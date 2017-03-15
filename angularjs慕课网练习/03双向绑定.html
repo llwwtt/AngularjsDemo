@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+    <div ng-app='mainapp' ng-controller='maincontroller'>
+    	<!-- input标签为view -->
+    	<input ng-model='greeting.text'>
+    	<!-- p标签为viewmodel -->
+    	<p>{{greeting.text}},angularjs</p>
+    </div>
+    
+
+	<script src="angular-1.5.8/angular.js"></script>
+	<script>
+		angular.module('mainapp',[])
+		.controller('maincontroller',['$scope',function($scope){
+			$scope.greeting = {
+				text:'你好'//model
+			}
+		}])
+	</script>
+</body>
+</html>

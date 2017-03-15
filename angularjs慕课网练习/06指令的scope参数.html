@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="./angular-1.5.8/angular.js"></script>
+</head>
+<body ng-app='main'>
+    <div ng-controller="parentCtrl">
+        <h3>指令scope参数-scope、true、{}对比</h3>
+        parent:
+        <div>
+            <span>{{parentName}}</span>
+            <input type="text" ng-model='parentName'>
+        </div>
+        <br>
+        <child-a></child-a>
+        <br>
+        <child-b></child-b>
+        <br>
+        <child-c parent-name='parentName'></child-c>
+    </div>
+    <!--指令模板t1-->
+    <script type='text/html' id='t1'>
+        <div>
+            <span>parentName:{{parentName}}</span>:
+            <input type="text" ng-model='parentName'>
+        </div>
+    </script>
+    <script>
+        var app = angular.module('main',[])
+        app.controller('parentCtrl',['$scope',function($scope){
+             $scope.parentName = '李刚';
+        }])
+
+        //自定义指令child-a
+        app.directive('childA',function(){
+            return {
+                restrict:'E',//限制为元素指令
+                scope:false,//false说明共享父级作用域
+                template:function(elem,attr){
+                    return 'false共享父级作用域'+document.getElementById('t1').innerHTML;
+                }
+             }        
+            })
+        //自定义指令child-b
+        app.directive('childB',function(){
+            return {
+                restrict:'E',
+                scope:true,//true代表继承父级作用域 并创建新的子域
+                template:function(){
+                    return 'true继承父级作用域 并创建新的子域'+document.getElementById('t1').innerHTML;
+                },
+                controller:function($scope){
+                    // $scope.parentName='';
+                    
+                    //已声明的情况下，$scope.$watch监听的是自己的parentName
+                    $scope.$watch('parentName',function(n,o){
+                        console.log('子作用域监听：'+n);
+                    })
+                    //$scope.$parent.$watch监听父级作用域的parentName 已声明监听无效undefied
+                    $scope.$parent.$watch('partentName',function(n,o){
+                        console.log('父级作用域监听：'+n);
+                    })
+                }
+            }
+        })
+        //自定义指令child-c
+        app.directive('childC',function(){
+            return {
+                restrict:'E',
+                scope:{},//{}代表不继承父级作用域 并创建子域
+                template:function(elem,attr){
+                    return '{}不继承父级作用域 并创建子域'+document.getElementById('t1').innerHTML;
+                },
+                controller:function($scope){
+                    // $scope.parentName='汉武大帝',
+                }
+            };
+        });
+
+    </script>
+</body>
+</html>
